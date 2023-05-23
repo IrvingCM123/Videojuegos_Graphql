@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'graphene_django',
-    'games'
+    'games',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -49,9 +50,19 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
 ]
 
-ROOT_URLCONF = 'videojuegos.urls'
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:4200',
+    'http://127.0.0.1:4200',
+]
+
+ROOT_URLCONF = 'players.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +80,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'videojuegos.wsgi.application'
+WSGI_APPLICATION = 'players.wsgi.application'
 
 
 # Database
@@ -78,9 +89,9 @@ WSGI_APPLICATION = 'videojuegos.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Videojuegos_Local',
+        'NAME': 'videojuegos_local',
         'USER': 'postgres',
-        'PASSWORD': 'ruben',
+        'PASSWORD': 'IrvingConde123',
         'HOST': 'localhost',
         'PORT': '5432'
     }
@@ -127,5 +138,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 GRAPHENE = {
-    'SCHEMA': 'videojuegos.schema.schema',
+    'SCHEMA': 'players.schema.schema',
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
 }
+
+AUTHENTICATION_BACKENDS = [
+    'graphql_jwt.backends.JSONWebTokenBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+CORS_ORIGIN_ALLOW_ALL = True
